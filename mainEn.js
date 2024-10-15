@@ -75,7 +75,7 @@ Juego.prototype.reset = function () {
   {
     this.estado = ESTADO.ESPERANDO;
     this.mostrarMensaje('Turno del jugador 2', 'blue');
-    this.tablero.marcar(JUGADOR.CPU, Math.floor(Math.random() * 9));
+    this.tablero.marcar(JUGADOR.CPU, 0);
   }
   this.partidas++;
   this.estado = ESTADO.JUGANDO;
@@ -132,67 +132,15 @@ Juego.prototype.mostrarMensaje = function (mensaje, color) {
   this.consola.innerHTML = '<span style="color:' + color + ';">' + mensaje + '</span>';
 };
 Juego.prototype.movimientoAI = function () {
-  var posicion = 0;
   var n = this.tablero.panel.length;
-  var aux,
-  mejor = - 9999;
   for (var i = 0; i < n; i++)
   {
     if (this.tablero.marcable(i))
     {
       this.tablero.marcar(JUGADOR.CPU, i);
-      aux = this.min();
-      if (aux > mejor)
-      {
-        mejor = aux;
-        posicion = i;
-      }
-      this.tablero.marcar(0, i);
+      return;
     }
   }
-  this.tablero.marcar(JUGADOR.CPU, posicion);
-};
-Juego.prototype.max = function () {
-  if (this.tablero.esGanador(JUGADOR.HUMANO)) return - 1;
-  if (!this.tablero.celdasVacias()) return 0;
-  var n = this.tablero.panel.length;
-  var aux,
-  mejor = - 9999;
-  for (var i = 0; i < n; i++)
-  {
-    if (this.tablero.marcable(i))
-    {
-      this.tablero.marcar(JUGADOR.CPU, i);
-      aux = this.min();
-      if (aux > mejor)
-      {
-        mejor = aux;
-      }
-      this.tablero.marcar(0, i);
-    }
-  }
-  return mejor;
-};
-Juego.prototype.min = function () {
-  if (this.tablero.esGanador(JUGADOR.CPU)) return 1;
-  if (!this.tablero.celdasVacias()) return 0;
-  var n = this.tablero.panel.length;
-  var aux,
-  mejor = 9999;
-  for (var i = 0; i < n; i++)
-  {
-    if (this.tablero.marcable(i))
-    {
-      this.tablero.marcar(JUGADOR.HUMANO, i);
-      aux = this.max();
-      if (aux < mejor)
-      {
-        mejor = aux;
-      }
-      this.tablero.marcar(0, i);
-    }
-  }
-  return mejor;
 };
 window.onload = function () {
   var juego = new Juego();
